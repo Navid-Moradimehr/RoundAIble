@@ -10,4 +10,7 @@ export default defineConfig({
       '/api': 'http://localhost:4000',
     },
   },
+  define: {
+    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'https://roundaible.vercel.app'),
+  },
 })
