@@ -3,8 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -29,15 +28,23 @@ jobs:
         node-version: '18'
         cache: 'npm'
         
-    - name: Install dependencies
+    - name: Install root dependencies
+      run: npm ci
+      
+    - name: Install frontend dependencies
       run: |
+        cd frontend
         npm ci
-        cd frontend && npm ci
         
-    - name: Build frontend
+    - name: Check frontend build
       run: |
         cd frontend
         npm run build
+        
+    - name: List build output
+      run: |
+        cd frontend
+        ls -la dist/
         
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main'
