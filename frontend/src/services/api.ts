@@ -6,12 +6,16 @@ export class ApiService {
   private localApiUrl: string;
 
   constructor() {
-    this.isLocalhost = window.location.hostname === 'localhost';
+    this.isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     this.localApiUrl = 'http://localhost:4000';
   }
 
   private getApi() {
-    if (this.isLocalhost) {
+    // Check if we're on GitHub Pages
+    const isGitHubPages = window.location.hostname.includes('github.io') || 
+                         window.location.hostname.includes('navid-moradimehr.github.io');
+    
+    if (this.isLocalhost && !isGitHubPages) {
       // Use local backend for development
       return {
         healthCheck: async () => {
@@ -33,6 +37,7 @@ export class ApiService {
       };
     } else {
       // Use client-side API for GitHub Pages
+      console.log('Using client-side API for GitHub Pages deployment');
       return (window as any).RoundAIbleAPI;
     }
   }

@@ -31,13 +31,28 @@ import JSZip from 'jszip';
 // Backend communication utilities
 const checkBackendHealth = async (): Promise<boolean> => {
   try {
-    const response = await fetch('http://localhost:4000/api/health', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return response.ok;
+    // Check if we're on GitHub Pages
+    const isGitHubPages = window.location.hostname.includes('github.io') || 
+                         window.location.hostname.includes('navid-moradimehr.github.io');
+    
+    if (isGitHubPages) {
+      // Use client-side API for GitHub Pages
+      const api = (window as any).RoundAIbleAPI;
+      if (api) {
+        const result = await api.healthCheck();
+        return result.status === 'ok';
+      }
+      return false;
+    } else {
+      // Use local backend for development
+      const response = await fetch('http://localhost:4000/api/health', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.ok;
+    }
   } catch (error) {
     console.error('Backend health check failed:', error);
     return false;
