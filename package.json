@@ -1,0 +1,41 @@
+{
+  "name": "roundaible-web",
+  "version": "1.0.0",
+  "description": "AI-Powered Multi-Agent Code Generation and Collaborative Reasoning Web Application",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "preview": "cd frontend && npm run preview",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint"
+  },
+  "keywords": [
+    "ai",
+    "code-generation",
+    "multi-agent",
+    "workflow",
+    "react",
+    "nodejs",
+    "typescript"
+  ],
+  "author": "Navid Moradimehr",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/roundaible-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/roundaible-web/issues"
+  },
+  "homepage": "https://your-username.github.io/roundaible-web"
+}
