@@ -67,8 +67,8 @@ Users create workflows by connecting different node types:
 ### **Development Setup**
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/roundaible.git
-cd roundaible
+git clone https://github.com/Navid-Moradimehr/RoundAIble.git
+cd RoundAIble
 
 # Install dependencies
 npm install

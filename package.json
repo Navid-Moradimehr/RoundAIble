@@ -32,10 +32,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/roundaible-web.git"
+    "url": "https://github.com/Navid-Moradimehr/RoundAIble.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/roundaible-web/issues"
+    "url": "https://github.com/Navid-Moradimehr/RoundAIble/issues"
   },
-  "homepage": "https://your-username.github.io/roundaible-web"
+  "homepage": "https://navid-moradimehr.github.io/RoundAIble"
 }
