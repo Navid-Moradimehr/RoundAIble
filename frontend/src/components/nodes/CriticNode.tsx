@@ -1,77 +1,45 @@
-import React from 'react';
-import { Handle, Position } from 'reactflow';
+import { memo } from 'react';
+import { Handle, Position } from '@xyflow/react';
+import type { AgentNodeData } from '../../lib/types';
 
-interface CriticNodeProps {
-  data: {
-    label?: string;
-    variant?: string;
-    model?: string;
-    hfModel?: string;
-    localModel?: string;
-    isCommented?: boolean;
-    [key: string]: any;
-  };
-}
-
-const CriticNode: React.FC<CriticNodeProps> = ({ data }) => {
+function CriticNodeInner({ data }: { data: AgentNodeData }) {
+  const isLocal = Boolean(data.isLocal);
   return (
-    <div style={{ 
-      width: 140, 
-      height: 80, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      position: 'relative',
-      opacity: data.isCommented ? 0.6 : 1
-    }}>
-      {/* Input Handle (Top) - Orange square */}
+    <div className={`relative flex h-20 w-[150px] items-center justify-center ${data.status === 'running' ? 'animate-pulse' : ''}`}>
       <Handle
         type="target"
         position={Position.Top}
         id="input"
-        style={{
-          width: 14,
-          height: 14,
-          background: '#ff9800',
-          border: '3px solid #fff',
-          borderRadius: '2px',
-          top: -7,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 10
-        }}
+        className="!z-10 !h-3.5 !w-3.5 !rounded-sm !border-[3px] !border-white !bg-orange-400"
       />
-      
-      <div style={{ 
-        width: '100%', 
-        height: '100%', 
-        background: data.isCommented ? '#f5f5f5' : 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)',
-        border: data.isCommented ? '2px dashed #999' : '2px solid #c62828',
-        borderRadius: 10,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontWeight: 'bold',
-        color: data.isCommented ? '#999' : 'white',
-        fontSize: 12,
-        boxShadow: '0 3px 10px rgba(0,0,0,0.12)',
-        textAlign: 'center',
-        padding: '4px'
-      }}>
-        <div style={{ fontSize: '16px', marginBottom: '2px' }}>
-          🔍
+      <div
+        className={`flex h-full w-full flex-col items-center justify-center rounded-xl px-1 text-center font-bold text-white shadow-md ${
+          data.isCommented ? 'border-2 border-dashed border-gray-400 bg-gray-100 text-gray-400' : ''
+        } ${data.status === 'error' ? 'ring-2 ring-red-500' : ''}`}
+        style={
+          data.isCommented
+            ? undefined
+            : {
+                background: isLocal
+                  ? 'linear-gradient(135deg,#ef6c00,#e65100)'
+                  : 'linear-gradient(135deg,#f44336,#d32f2f)',
+                border: `2px solid ${isLocal ? '#bf360c' : '#b71c1c'}`,
+              }
+        }
+        title="Double-click to configure"
+      >
+        <div className="mb-0.5 text-base leading-none">
+          {data.status === 'running' ? '⏳' : data.status === 'error' ? '❌' : '🔍'}
         </div>
-        <div style={{ fontSize: '11px', lineHeight: '1.2' }}>
-          {data.label || 'Critic'}
-        </div>
-        <div style={{ fontSize: '9px', opacity: 0.8, marginTop: '2px' }}>
-          Review
-        </div>
+        <div className="text-[11px] leading-tight">{data.label || 'Critic'}</div>
+        <div className="mt-0.5 text-[9px] opacity-80">{String(data.model || 'select model')}</div>
       </div>
-      {data.isCommented && <span style={{ position: 'absolute', top: -8, right: -8, fontSize: '12px' }}>💬</span>}
+      {data.isCommented && (
+        <span className="absolute -right-2 -top-2 text-xs">💬</span>
+      )}
     </div>
   );
-};
+}
 
-export default CriticNode; 
+const CriticNode = memo(CriticNodeInner);
+export default CriticNode;

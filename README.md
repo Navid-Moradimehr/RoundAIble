@@ -1,193 +1,92 @@
 # RoundAIble Web
 
-**AI-Powered Multi-Agent Code Generation and Collaborative Reasoning**
+**Multi-agent code generation with competitive critique — local-first, in your browser.**
 
-RoundAIble Web is a sophisticated web application that enables competitive code generation through multiple AI agents, intelligent critique systems, and real-time workflow management. Built with React, Node.js, and modern web technologies for seamless browser-based experience.
+RoundAIble lets you wire multiple AI models into a visual workflow: they all solve the same coding task, critique each other, and a critic panel scores every submission so the best one wins. Runs entirely on your machine — your code and API keys never leave it.
 
-## 🚀 Key Features
+## How it works
 
-### **Multi-Agent Code Generation**
-- **Competitive AI Agents**: Multiple AI models compete to generate the best code solutions
-- **Diverse Model Support**: OpenAI GPT models, Anthropic Claude, Google Gemini, HuggingFace models, and local Ollama models
-- **Parallel Processing**: Agents work simultaneously to provide multiple solutions
-- **Code Quality Assessment**: Automated scoring and ranking of generated code
+1. **Design** — drag nodes onto the canvas: an **Input** node (new code / modify code / bug fix), one or more **Reasoning Agent** nodes, optional **Critic** nodes, and the **RoundAIble** orchestrator.
+2. **Run** — agents generate solutions *in parallel*, optionally refine them through peer-review rounds, then every critic scores every submission on a 0–10 scale using structured output.
+3. **Win** — the highest average score wins. Results stream live over SSE while the run is in progress.
 
-### **Intelligent Critique System**
-- **Automated Code Review**: AI-powered critics analyze and score generated code
-- **Detailed Feedback**: Comprehensive analysis with suggestions for improvement
-- **Multiple Critique Perspectives**: Different AI models provide varied viewpoints
-- **Scoring Algorithm**: Sophisticated scoring system to determine the best solution
+## Honest notes (what this MVP does and doesn't do)
 
-### **Visual Workflow Editor**
-- **Drag-and-Drop Interface**: Intuitive node-based workflow design
-- **Real-time Connection**: Connect different components with visual links
-- **Multi-Node Support**: Input nodes, reasoning agents, critics, and output nodes
-- **Workflow Management**: Save, load, and manage multiple workflow configurations
+- ✅ Live progress via Server-Sent Events; finished runs are persisted to disk.
+- ✅ Workflows autosave to your browser; export/import as JSON files.
+- ✅ Single-agent runs are labeled **unranked** — no fabricated scores.
+- ❌ No real-time collaboration or user accounts (by design — it's local-first).
+- ❌ No cloud hosting story yet: the backend must run locally.
 
-### **Modern Web Application**
-- **Browser-Based**: Access from any device with a modern web browser
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Real-time Collaboration**: Share workflows and collaborate with team members
-- **Secure Architecture**: Built with modern web security standards
+## Supported providers
 
-## 🏗️ How It Works
+| Cloud | Local |
+| --- | --- |
+| OpenAI (GPT-5 family, o3…) | Ollama (Qwen3 Coder, DeepSeek R1, Gemma 3…) |
+| Anthropic (Claude Opus/Sonnet 4.x) | Any OpenAI-compatible server (LM Studio, vLLM, llama.cpp) via **Custom endpoint** |
+| Google Gemini 2.5 | |
+| xAI Grok, DeepSeek, Groq, Mistral, Perplexity, OpenRouter | |
 
-### **1. Workflow Design**
-Users create workflows by connecting different node types:
-- **Input Node**: Defines the coding task (new code, modifications, bug fixes)
-- **Reasoning Agents**: AI models that generate code solutions
-- **Critic Nodes**: AI models that evaluate and score the generated code
-- **RoundAIble Node**: Central orchestrator that manages the competition
+All OpenAI-compatible providers share one client; add a provider by pointing the **Custom** option at its base URL.
 
-### **2. Code Generation Process**
-1. **Task Definition**: User specifies requirements in the input node
-2. **Agent Competition**: Multiple AI agents generate code simultaneously
-3. **Code Analysis**: Each agent's solution is analyzed by critic nodes
-4. **Scoring & Ranking**: Solutions are scored and ranked based on quality
-5. **Winner Selection**: The best solution is identified and presented
+## Quick start
 
-### **3. Real-time Monitoring**
-- **Live Chat Interface**: Monitor agent interactions in real-time
-- **Progress Tracking**: Visual indicators of workflow progress
-- **Result Display**: Comprehensive results panel with code, scores, and feedback
-
-## 🛠️ Installation & Setup
-
-### **System Requirements**
-- **Browser**: Chrome 90+, Firefox 88+, Safari 14+, or Edge 90+
-- **Internet Connection**: Required for AI model access and real-time features
-- **API Keys**: OpenAI, Anthropic, Google, or HuggingFace API keys for AI services
-
-### **Quick Start**
-1. **Visit**: Open the web application in your browser
-2. **Configure**: Add your API keys for cloud AI services
-3. **Create**: Start building your first workflow
-4. **Share**: Collaborate with team members in real-time
-
-### **Development Setup**
 ```bash
-# Clone the repository
 git clone https://github.com/Navid-Moradimehr/RoundAIble.git
 cd RoundAIble
+npm install && npm install --prefix backend && npm install --prefix frontend
 
-# Install dependencies
-npm install
-cd backend && npm install
-cd ../frontend && npm install
-
-# Start development servers
-npm run dev
+npm run dev        # starts backend (:4000) + frontend (:5173)
 ```
 
+Open http://localhost:5173, click **🔑 API Keys** to store a key for your provider, then configure each agent node (double-click) and press **▶ Start**.
 
+Optional configuration lives in `backend/.env` — see `backend/.env.example`.
 
-## 🔧 Configuration
+## Testing without spending money
 
-### **API Keys & Model Setup**
-For detailed instructions on setting up API keys and local models, see the [API Setup Guide](API_SETUP_GUIDE.md).
+A stub LLM server mimics OpenAI-compatible responses so you can exercise the whole flow:
 
-RoundAIble supports multiple AI providers:
-- **OpenAI**: GPT-4, GPT-3.5-turbo, GPT-4o
-- **Anthropic**: Claude 3, Claude 2
-- **Google**: Gemini Pro, Gemini Flash
-- **HuggingFace**: Thousands of open-source models
-- **Local Models**: Via Ollama (privacy-focused, offline capable)
-
-### **Environment Configuration**
-Create a `.env` file in the backend directory:
-```env
-# Server Configuration
-PORT=3000
-NODE_ENV=development
-
-# API Keys (optional for local models)
-OPENAI_API_KEY=your_openai_key
-ANTHROPIC_API_KEY=your_anthropic_key
-GOOGLE_API_KEY=your_google_key
-HUGGINGFACE_API_KEY=your_hf_key
-```
-
-## 📊 Workflow Examples
-
-### **Example 1: Simple Code Generation**
-1. Add an Input Node with your coding task
-2. Connect to multiple Reasoning Agent nodes (API, Local, HuggingFace)
-3. Connect Reasoning Agents to Critic nodes
-4. Run the workflow to get multiple solutions with scores
-
-### **Example 2: Code Review Workflow**
-1. Input Node with existing code
-2. Reasoning Agents analyze the code
-3. Critic nodes provide detailed feedback
-4. Get comprehensive code review with improvement suggestions
-
-### **Example 3: Bug Fix Workflow**
-1. Input Node with buggy code and error messages
-2. Multiple agents attempt different fixes
-3. Critics evaluate the quality of each fix
-4. Select the best solution based on scores
-
-## 🔒 Security & Privacy
-
-### **Data Protection**
-- **Local Processing**: Ollama models run entirely on your machine
-- **Encrypted Storage**: Sensitive data is encrypted at rest
-- **Secure Communication**: HTTPS for all API communications
-- **No Data Collection**: RoundAIble doesn't collect or store your code
-
-### **API Security**
-- **Key Management**: Secure storage of API keys
-- **Rate Limiting**: Built-in protection against API abuse
-- **Error Handling**: Graceful handling of API failures
-- **Fallback Options**: Local models as backup for cloud services
-
-## 🐛 Troubleshooting
-
-### **Common Issues**
-
-#### **Ollama Connection Issues**
 ```bash
-# Check if Ollama is running
-ollama list
-
-# Restart Ollama service
-ollama serve
-
-# Test model availability
-ollama run codellama:7b "Hello, world!"
+node backend/scripts/stub-llm.mjs          # listens on :4510
 ```
 
-#### **API Key Problems**
-- Verify API keys are correctly entered
-- Check API key permissions and quotas
-- Ensure internet connectivity for cloud models
+In the app, set any agent's provider to **Custom OpenAI-compatible endpoint**, base URL `http://localhost:4510/v1`, model `stub-1`, and run a template workflow.
 
-#### **Performance Issues**
-- Close unnecessary applications to free memory
-- Use smaller models for faster response times
-- Consider GPU acceleration for local models
+## Development
 
-### **Getting Help**
-- Check the console for error messages
-- Verify all dependencies are installed
-- Ensure sufficient system resources
-- Contact support with detailed error information
+```bash
+npm run build       # typecheck + build both packages
+npm run test        # backend unit tests (vitest): score parsing, response parsing
+npm run lint        # eslint (frontend)
+```
 
+### Project layout
 
+```
+backend/
+  src/routes/execution.ts     POST execute (returns runId) · SSE /runs/:id/events · /runs/:id/result
+  src/services/
+    providers.ts              Provider catalog + URL/model validation
+    llmClient.ts              Unified client: timeouts, retry-once, no prompt logging
+    prompts.ts                Codegen / peer-review / revision / critic prompt builders
+    scoreParser.ts            Hardened critic-score parser (clamped, injection-resistant)
+    workflowEngine.ts         Event-driven engine (parallel agents, honest unranked mode)
+    runsStore.ts              In-memory + on-disk run persistence
+frontend/
+  src/components/NodeEditor.tsx   Slim orchestrator (~550 lines incl. JSX)
+  src/components/nodes/*          Canvas node components
+  src/hooks/*                     useApiKeys · useWorkflows · useRun · useBackendHealth · useToasts
+  src/lib/*                       api client · provider catalog · templates · validation · storage
+```
 
-## 🤝 Support
+## Security model (MVP scope)
 
-For technical support, feature requests, or bug reports:
-- **Email**: navidmoradimehr2@gmail.com
-- **Documentation**: Check this README and inline help
-- **Issues**: Report bugs with detailed information
+- API keys are stored only in your browser (`localStorage`) and sent per-run to the local backend in a dedicated header — never inside workflow graphs, never logged, never persisted server-side.
+- The backend binds to `127.0.0.1` by default; CORS allows only localhost origins unless configured otherwise.
+- Critic scores are clamped to 0–10, restricted to known submission indices, and parsed from structured output so agent output can't manipulate rankings.
+- Model IDs and custom base URLs are validated before being used in requests.
 
-## 📄 License
+## License
 
-This software is proprietary and confidential. See the [LICENSE](LICENSE) file for complete terms and conditions.
-
----
-
-**RoundAIble** - Empowering developers with AI-driven code generation and intelligent critique.
-
-*Built with ❤️ by Navid Moradimehr* 
+MIT — see [LICENSE](LICENSE).

@@ -6,38 +6,52 @@ import executionRoutes from './routes/execution.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = Number(process.env.PORT || 4000);
+const HOST = process.env.HOST || '127.0.0.1';
 
-app.use(cors());
-app.use(express.json());
+const allowedOrigins = (process.env.CORS_ORIGIN || '')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'RoundAIble backend is running!' });
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Allow same-origin/no-origin (curl, EventSource) and localhost dev servers.
+      if (!origin) return callback(null, true);
+      if (
+        allowedOrigins.includes(origin) ||
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    },
+  })
+);
+app.use(express.json({ limit: '2mb' }));
+
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok', version: '2.0.0' });
 });
 
-// API routes
 app.use('/api', executionRoutes);
 
-// Error handling middleware
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error('❌ Server error:', err);
-  res.status(500).json({
-    error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
-  });
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('Server error:', err.message);
+  if (!res.headersSent) {
+    res.status(500).json({
+      error: 'Internal server error',
+      message: process.env.NODE_ENV === 'development' ? err.message : undefined,
+    });
+  }
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({
-    error: 'Route not found',
-    message: `Cannot ${req.method} ${req.originalUrl}`
-  });
+app.use('/api', (_req, res) => {
+  res.status(404).json({ error: 'Route not found' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend server running on http://localhost:${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
-  console.log(`⚡ Workflow execution: http://localhost:${PORT}/api/workflows/:id/execute`);
-}); 
+app.listen(PORT, HOST, () => {
+  console.log(`RoundAIble backend running at http://${HOST}:${PORT}`);
+  console.log(`Health check: http://${HOST}:${PORT}/api/health`);
+});

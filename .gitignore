@@ -42,6 +42,11 @@ pids
 *.seed
 *.pid.lock
 
+# RoundAIble local data
+.data/
+.playwright-cli/
+output/
+
 # Coverage directory used by tools like istanbul
 coverage/
 *.lcov

@@ -1,70 +1,35 @@
-import React from 'react';
-import { Handle, Position } from 'reactflow';
+import { memo } from 'react';
+import { Handle, Position } from '@xyflow/react';
+import type { InputNodeData } from '../../lib/types';
 
-interface InputNodeProps {
-  data: {
-    label?: string;
-    inputType?: string;
-    prompt?: string;
-    existingCode?: string;
-    modificationRequest?: string;
-    errorMessage?: string;
-    additionalContext?: string;
-    rounds?: number;
-    tagged?: string;
-    knowCompetitors?: string;
-    isCommented?: boolean;
-    [key: string]: any;
-  };
-}
-
-const InputNode: React.FC<InputNodeProps> = ({ data }) => {
+function InputNodeInner({ data }: { data: InputNodeData }) {
   return (
-    <div style={{ 
-      width: 120, 
-      height: 60, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      position: 'relative',
-      opacity: data.isCommented ? 0.6 : 1
-    }}>
-      {/* Output Handle (Right) - Blue circle to match RoundAIble's left port */}
+    <div className="relative flex h-16 w-[130px] items-center justify-center">
       <Handle
         type="source"
         position={Position.Right}
         id="output"
-        style={{
-          width: 14,
-          height: 14,
-          background: '#2196f3',
-          border: '3px solid #fff',
-          borderRadius: '50%',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 10
-        }}
+        className="!z-10 !h-3.5 !w-3.5 !rounded-full !border-[3px] !border-white !bg-blue-500"
       />
-      
-      <div style={{ 
-        width: '100%', 
-        height: '100%', 
-        background: data.isCommented ? '#f5f5f5' : 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)',
-        border: data.isCommented ? '2px dashed #999' : '2px solid #2e7d32',
-        borderRadius: 8,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontWeight: 'bold',
-        color: data.isCommented ? '#999' : 'white',
-        fontSize: 14,
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-      }}>
+      <div
+        className={`flex h-full w-full items-center justify-center rounded-lg text-sm font-bold text-white shadow ${
+          data.isCommented
+            ? 'border-2 border-dashed border-gray-400 bg-gray-100 text-gray-400'
+            : 'border-2 border-green-800'
+        }`}
+        style={
+          data.isCommented ? undefined : { background: 'linear-gradient(135deg,#4caf50,#45a049)' }
+        }
+        title="Double-click to configure"
+      >
         {data.label || 'Input'}
       </div>
-      {data.isCommented && <span style={{ position: 'absolute', top: -8, right: -8, fontSize: '12px' }}>💬</span>}
+      {data.isCommented && (
+        <span className="absolute -right-2 -top-2 text-xs">💬</span>
+      )}
     </div>
   );
-};
+}
 
-export default InputNode; 
+const InputNode = memo(InputNodeInner);
+export default InputNode;

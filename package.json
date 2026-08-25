@@ -1,10 +1,10 @@
 {
   "name": "roundaible-web",
-  "version": "1.0.0",
-  "description": "AI-Powered Multi-Agent Code Generation and Collaborative Reasoning Web Application",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "AI-Powered Multi-Agent Code Generation and Collaborative Reasoning (local-first web app)",
+  "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev": "concurrently -n backend,frontend \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build": "npm run build:backend && npm run build:frontend",
@@ -12,9 +12,12 @@
     "build:frontend": "cd frontend && npm run build",
     "start": "cd backend && npm start",
     "preview": "cd frontend && npm run preview",
-    "lint": "npm run lint:frontend && npm run lint:backend",
+    "typecheck": "npm run typecheck:backend && npm run typecheck:frontend",
+    "typecheck:backend": "cd backend && npm run typecheck",
+    "typecheck:frontend": "cd frontend && npm run typecheck",
+    "lint": "npm run lint:frontend",
     "lint:frontend": "cd frontend && npm run lint",
-    "lint:backend": "cd backend && npm run lint"
+    "test": "cd backend && npm test"
   },
   "keywords": [
     "ai",
@@ -36,6 +39,5 @@
   },
   "bugs": {
     "url": "https://github.com/Navid-Moradimehr/RoundAIble/issues"
-  },
-  "homepage": "https://navid-moradimehr.github.io/RoundAIble"
+  }
 }
