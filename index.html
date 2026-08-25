@@ -3,61 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RoundAIble - AI-Powered Code Generation</title>
+    <title>RoundAIble — Multi-Agent Code Generation</title>
+    <meta name="description" content="Wire multiple AI models into a visual workflow: they compete on your coding task, critique each other, and the best code wins. Local-first, open source.">
     <style>
+        * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            padding: 40px;
+            padding: 40px 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-        .container {
-            text-align: center;
-            max-width: 600px;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-        .status {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
+        .container { max-width: 760px; margin: 0 auto; text-align: center; }
+        h1 { font-size: 3rem; margin: 20px 0 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .tagline { font-size: 1.25rem; opacity: 0.95; margin-bottom: 36px; }
+        .card {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
             backdrop-filter: blur(10px);
+            padding: 28px;
+            border-radius: 14px;
+            margin-bottom: 22px;
+            text-align: left;
         }
-        .coming-soon {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #ffd700;
+        .steps { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 16px; text-align: left; }
+        .step b { display: block; margin-bottom: 6px; }
+        .step { font-size: 0.95rem; line-height: 1.5; opacity: 0.97; }
+        h2 { margin-top: 0; font-size: 1.15rem; }
+        pre {
+            background: rgba(0,0,0,0.35); padding: 14px 16px; border-radius: 8px;
+            overflow-x: auto; text-align: left; font-size: 0.88rem; line-height: 1.5;
         }
+        a.btn {
+            display: inline-block; background: white; color: #5b3fa8;
+            padding: 12px 26px; border-radius: 999px; text-decoration: none;
+            font-weight: 700; margin: 4px 8px 0; transition: transform .15s ease;
+        }
+        a.btn:hover { transform: translateY(-2px); }
+        a.ghost { background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+        .note { font-size: 0.85rem; opacity: 0.85; }
+        footer { margin-top: 34px; font-size: 0.9rem; opacity: 0.8; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 RoundAIble</h1>
-        <p>AI-Powered Multi-Agent Code Generation and Collaborative Reasoning</p>
-        
-        <div class="status">
-            <div class="coming-soon">Coming Soon!</div>
-            <p>Our sophisticated web application is being deployed. This page confirms that GitHub Pages deployment is working correctly.</p>
-            <p><strong>Status:</strong> ✅ Basic deployment successful</p>
-            <p><strong>Next:</strong> Full React application deployment in progress...</p>
+        <h1>⭕ RoundAIble</h1>
+        <p class="tagline">Multiple AI agents solve your coding task. They critique each other. The best code wins.</p>
+
+        <div class="card">
+            <div class="steps">
+                <div class="step"><b>🧩 1. Design</b>Drag Input, Reasoning Agent, Critic and RoundAIble nodes onto a visual canvas.</div>
+                <div class="step"><b>⚔️ 2. Compete</b>Agents generate solutions in parallel and refine them through peer-review rounds.</div>
+                <div class="step"><b>🏆 3. Win</b>Critics score every submission on a 0–10 scale; results stream in live.</div>
+            </div>
         </div>
-        
-        <p style="margin-top: 40px; font-size: 0.9rem; opacity: 0.8;">
-            Built with ❤️ by Navid Moradimehr
-        </p>
+
+        <div class="card">
+            <h2>🔌 Works with your models</h2>
+            <p style="margin:0 0 10px;line-height:1.55">
+                OpenAI GPT‑5.6 · Anthropic Claude Opus&nbsp;5 &amp; Fable&nbsp;5 · Google Gemini&nbsp;3.7 · xAI Grok&nbsp;4.20 ·
+                DeepSeek V4 · Kimi K3 · Qwen 3.8 · GLM‑5.3 · MiniMax M3 · Mistral · Groq · Perplexity · OpenRouter ·
+                plus local models via <b>Ollama</b> or any OpenAI-compatible endpoint (LM Studio, vLLM…).
+            </p>
+            <p class="note" style="margin:0">🔒 Local-first: your code and API keys never leave your machine.</p>
+        </div>
+
+        <div class="card">
+            <h2>🚀 Run it locally</h2>
+            <pre>git clone https://github.com/Navid-Moradimehr/RoundAIble.git
+cd RoundAIble
+npm install &amp;&amp; npm install --prefix backend --prefix frontend
+npm run dev          # backend :4000 + app at localhost:5199</pre>
+        </div>
+
+        <a class="btn" href="https://github.com/Navid-Moradimehr/RoundAIble">⭐ View on GitHub</a>
+        <a class="btn ghost" href="https://github.com/Navid-Moradimehr/RoundAIble#readme">📖 Read the docs</a>
+
+        <footer>Built with ❤️ by <b>Navid Moradimehr</b> · MIT License · v2.0</footer>
     </div>
 </body>
 </html>
