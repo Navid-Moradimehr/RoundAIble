@@ -1,16 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  base: './',
+  plugins: [react(), tailwindcss()],
   server: {
+    port: 5199,
+    strictPort: true,
     proxy: {
-      '/api': 'http://localhost:4000',
+      '/api': {
+        target: process.env.VITE_API_PROXY || 'http://localhost:4000',
+        changeOrigin: false,
+      },
     },
-  },
-  define: {
-    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'https://roundaible.vercel.app'),
   },
 })

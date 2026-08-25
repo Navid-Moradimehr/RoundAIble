@@ -1,100 +1,46 @@
-import React from 'react';
-import { Handle, Position } from 'reactflow';
+import { memo } from 'react';
+import { Handle, Position } from '@xyflow/react';
+import type { RoundaibleNodeData } from '../../lib/types';
 
-interface RoundAIbleNodeProps {
-  data: {
-    label?: string;
-    isCommented?: boolean;
-    [key: string]: any;
-  };
-}
-
-const RoundAIbleNode: React.FC<RoundAIbleNodeProps> = ({ data }) => {
+function RoundAIbleNodeInner({ data }: { data: RoundaibleNodeData }) {
   return (
-    <div style={{ 
-      width: 150, 
-      height: 100, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      position: 'relative',
-      opacity: data.isCommented ? 0.6 : 1
-    }}>
-      {/* Input Handle (Left) - Blue circle */}
+    <div className="relative flex h-24 w-[150px] items-center justify-center">
       <Handle
         type="target"
         position={Position.Left}
         id="input"
-        style={{
-          width: 14,
-          height: 14,
-          background: '#2196f3',
-          border: '3px solid #fff',
-          borderRadius: '50%',
-          left: -7,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 10
-        }}
+        className="!z-10 !h-3.5 !w-3.5 !rounded-full !border-[3px] !border-white !bg-blue-500"
       />
-      
-      {/* Reasoning Handle (Top) - Green diamond */}
       <Handle
         type="target"
         position={Position.Top}
         id="reasoning"
-        style={{
-          width: 14,
-          height: 14,
-          background: '#4caf50',
-          border: '3px solid #fff',
-          borderRadius: '2px',
-          top: -7,
-          left: '50%',
-          transform: 'translateX(-50%) rotate(45deg)',
-          zIndex: 10
-        }}
+        className="!z-10 !h-3.5 !w-3.5 !rotate-45 !rounded-sm !border-[3px] !border-white !bg-green-500"
       />
-      
-      {/* Critic Handle (Bottom) - Orange square */}
       <Handle
         type="source"
         position={Position.Bottom}
         id="critic"
-        style={{
-          width: 14,
-          height: 14,
-          background: '#ff9800',
-          border: '3px solid #fff',
-          borderRadius: '2px',
-          bottom: -7,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 10
-        }}
+        className="!z-10 !h-3.5 !w-3.5 !rounded-sm !border-[3px] !border-white !bg-orange-400"
       />
-      
-      <div style={{ 
-        width: '100%', 
-        height: '100%', 
-        background: data.isCommented ? '#f5f5f5' : 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
-        border: data.isCommented ? '2px dashed #999' : '2px solid #0d47a1',
-        borderRadius: 12,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontWeight: 'bold',
-        color: data.isCommented ? '#999' : 'white',
-        fontSize: 16,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        textAlign: 'center',
-        padding: '8px'
-      }}>
+      <div
+        className={`flex h-full w-full items-center justify-center rounded-xl px-2 text-center text-base font-bold shadow-lg ${
+          data.isCommented
+            ? 'border-2 border-dashed border-gray-400 bg-gray-100 text-gray-400'
+            : 'border-2 border-blue-900 text-white'
+        }`}
+        style={
+          data.isCommented ? undefined : { background: 'linear-gradient(135deg,#1976d2,#1565c0)' }
+        }
+      >
         {data.label || 'RoundAIble'}
       </div>
-      {data.isCommented && <span style={{ position: 'absolute', top: -8, right: -8, fontSize: '12px' }}>💬</span>}
+      {data.isCommented && (
+        <span className="absolute -right-2 -top-2 text-xs">💬</span>
+      )}
     </div>
   );
-};
+}
 
-export default RoundAIbleNode; 
+const RoundAIbleNode = memo(RoundAIbleNodeInner);
+export default RoundAIbleNode;

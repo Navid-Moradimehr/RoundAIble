@@ -1,118 +1,80 @@
-import React from 'react';
-import { Handle, Position } from 'reactflow';
+import { memo } from 'react';
+import { Handle, Position } from '@xyflow/react';
+import type { AgentNodeData } from '../../lib/types';
 
-export type ReasoningAgentVariant = 'api' | 'huggingface' | 'local';
+const CLOUD = {
+  gradient: 'linear-gradient(135deg,#9c27b0,#7b1fa2)',
+  border: '#6a1b9a',
+};
+const LOCAL = {
+  gradient: 'linear-gradient(135deg,#00897b,#00695c)',
+  border: '#004d40',
+};
 
-interface ReasoningAgentNodeProps {
-  data: {
-    label?: string;
-    variant?: ReasoningAgentVariant;
-    model?: string;
-    hfModel?: string;
-    localModel?: string;
-    isCommented?: boolean;
-    [key: string]: any;
-  };
+function AgentNodeShell({
+  data,
+  icon,
+  fallbackLabel,
+  subtitle,
+  children,
+}: {
+  data: AgentNodeData;
+  icon: string;
+  fallbackLabel: string;
+  subtitle: string;
+  children: React.ReactNode;
+}) {
+  const isLocal = Boolean(data.isLocal);
+  const palette = isLocal ? LOCAL : CLOUD;
+  return (
+    <div className={`relative flex h-20 w-[150px] items-center justify-center ${data.status === 'running' ? 'animate-pulse' : ''}`}>
+      {children}
+      <div
+        className={`flex h-full w-full flex-col items-center justify-center rounded-xl px-1 text-center font-bold text-white shadow-md ${
+          data.isCommented ? 'border-2 border-dashed border-gray-400 bg-gray-100 text-gray-400' : ''
+        } ${data.status === 'error' ? 'ring-2 ring-red-500' : ''}`}
+        style={
+          data.isCommented
+            ? undefined
+            : {
+                background: palette.gradient,
+                border: `2px solid ${palette.border}`,
+              }
+        }
+        title="Double-click to configure"
+      >
+        <div className="mb-0.5 text-base leading-none">
+          {data.status === 'running' ? '⏳' : data.status === 'error' ? '❌' : icon}
+        </div>
+        <div className="text-[11px] leading-tight">{data.label || fallbackLabel}</div>
+        <div className="mt-0.5 text-[9px] opacity-80">
+          {String(data.model || subtitle)}
+        </div>
+      </div>
+      {data.isCommented && (
+        <span className="absolute -right-2 -top-2 text-xs">💬</span>
+      )}
+    </div>
+  );
 }
 
-const ReasoningAgentNode: React.FC<ReasoningAgentNodeProps> = ({ data }) => {
-  const getVariantColor = () => {
-    switch (data.variant) {
-      case 'api':
-        return 'linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%)';
-      case 'huggingface':
-        return 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)';
-      case 'local':
-        return 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)';
-      default:
-        return 'linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%)';
-    }
-  };
-
-  const getVariantBorder = () => {
-    switch (data.variant) {
-      case 'api':
-        return '#6a1b9a';
-      case 'huggingface':
-        return '#e65100';
-      case 'local':
-        return '#2e7d32';
-      default:
-        return '#6a1b9a';
-    }
-  };
-
-  const getVariantIcon = () => {
-    switch (data.variant) {
-      case 'api':
-        return '🔌';
-      case 'huggingface':
-        return '🤗';
-      case 'local':
-        return '💻';
-      default:
-        return '🔌';
-    }
-  };
-
+function ReasoningAgentNodeInner({ data }: { data: AgentNodeData }) {
   return (
-    <div style={{ 
-      width: 140, 
-      height: 80, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      position: 'relative',
-      opacity: data.isCommented ? 0.6 : 1
-    }}>
-      {/* Output Handle (Right) - Green diamond */}
+    <AgentNodeShell
+      data={data}
+      icon={data.isLocal ? '💻' : '🔌'}
+      fallbackLabel="Reasoning"
+      subtitle="select model"
+    >
       <Handle
         type="source"
         position={Position.Right}
         id="output"
-        style={{
-          width: 14,
-          height: 14,
-          background: '#4caf50',
-          border: '3px solid #fff',
-          borderRadius: '2px',
-          right: -7,
-          top: '50%',
-          transform: 'translateY(-50%) rotate(45deg)',
-          zIndex: 10
-        }}
+        className="!z-10 !h-3.5 !w-3.5 !rotate-45 !rounded-sm !border-[3px] !border-white !bg-green-500"
       />
-      
-      <div style={{ 
-        width: '100%', 
-        height: '100%', 
-        background: data.isCommented ? '#f5f5f5' : getVariantColor(),
-        border: data.isCommented ? '2px dashed #999' : `2px solid ${getVariantBorder()}`,
-        borderRadius: 10,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontWeight: 'bold',
-        color: data.isCommented ? '#999' : 'white',
-        fontSize: 12,
-        boxShadow: '0 3px 10px rgba(0,0,0,0.12)',
-        textAlign: 'center',
-        padding: '4px'
-      }}>
-        <div style={{ fontSize: '16px', marginBottom: '2px' }}>
-          {getVariantIcon()}
-        </div>
-        <div style={{ fontSize: '11px', lineHeight: '1.2' }}>
-          {data.label || 'Reasoning'}
-        </div>
-        <div style={{ fontSize: '9px', opacity: 0.8, marginTop: '2px' }}>
-          {data.variant || 'api'}
-        </div>
-      </div>
-      {data.isCommented && <span style={{ position: 'absolute', top: -8, right: -8, fontSize: '12px' }}>💬</span>}
-    </div>
+    </AgentNodeShell>
   );
-};
+}
 
-export default ReasoningAgentNode; 
+const ReasoningAgentNode = memo(ReasoningAgentNodeInner);
+export default ReasoningAgentNode;
