@@ -31,15 +31,29 @@ All OpenAI-compatible providers share one client; add a provider by pointing the
 
 ## Quick start
 
+**Option A — one command (no setup):**
+
+```bash
+npx github:Navid-Moradimehr/RoundAIble
+```
+
+Installs dependencies on first run, builds, starts everything and opens your browser at **http://localhost:4199**. One process serves both the app and its API.
+
+**Option B — double-click:**
+
+- Windows: `scripts\start-windows.cmd`
+- macOS: `scripts/start-mac.command` (double-click in Finder)
+
+**Option C — development mode** (hot reload, separate servers):
+
 ```bash
 git clone https://github.com/Navid-Moradimehr/RoundAIble.git
 cd RoundAIble
-npm install && npm install --prefix backend && npm install --prefix frontend
-
-npm run dev        # starts backend (:4000) + frontend (:5173)
+npm install        # also builds both packages automatically
+npm run dev        # backend :4000 + Vite :5199
 ```
 
-Open http://localhost:5173, click **🔑 API Keys** to store a key for your provider, then configure each agent node (double-click) and press **▶ Start**.
+Then click **🔑 API Keys** to store a key for your provider, configure each agent node (double-click) and press **▶ Start**.
 
 Optional configuration lives in `backend/.env` — see `backend/.env.example`.
 

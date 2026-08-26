@@ -1,0 +1,43 @@
+{
+  "hash": "eff6af28",
+  "configHash": "11644958",
+  "lockfileHash": "872abd66",
+  "browserHash": "d4204bd7",
+  "optimized": {
+    "@xyflow/react": {
+      "src": "../../node_modules/@xyflow/react/dist/esm/index.js",
+      "file": "@xyflow_react.js",
+      "fileHash": "f682ef93",
+      "needsInterop": false
+    },
+    "jszip": {
+      "src": "../../node_modules/jszip/dist/jszip.min.js",
+      "file": "jszip.js",
+      "fileHash": "d3b934a1",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "96aeb70f",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "92dd297e",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-M77MRNZL": {
+      "file": "chunk-M77MRNZL.js"
+    },
+    "chunk-45R4IVA7": {
+      "file": "chunk-45R4IVA7.js"
+    },
+    "chunk-7D4SUZUM": {
+      "file": "chunk-7D4SUZUM.js"
+    }
+  }
+}
