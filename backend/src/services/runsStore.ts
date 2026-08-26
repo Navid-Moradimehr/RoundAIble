@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { RunEvent, ExecutionStatus } from '../services/workflowEngine.js';
 
 export interface RunRecord {
@@ -12,7 +13,10 @@ export interface RunRecord {
   result?: ExecutionStatus;
 }
 
-const RUNS_DIR = path.resolve(process.env.RUNS_DIR || '.data/runs');
+// Default to <backend>/.data/runs regardless of process CWD, so the app can
+// be launched from anywhere (npx, launcher scripts) and still find its data.
+const DEFAULT_RUNS_DIR = fileURLToPath(new URL('../../.data/runs', import.meta.url));
+const RUNS_DIR = path.resolve(process.env.RUNS_DIR || DEFAULT_RUNS_DIR);
 
 function persist(record: RunRecord) {
   try {
