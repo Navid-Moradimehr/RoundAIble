@@ -26,6 +26,8 @@ import WorkflowSidebar from './WorkflowSidebar';
 import ConfigModal from './ConfigModal';
 import ApiKeyManagerModal from './ApiKeyManagerModal';
 import RoundaibleResultsPanel from './RoundaibleResultsPanel';
+import OnboardingCard from './OnboardingCard';
+import { hasSeenOnboarding, markOnboardingDone } from '../lib/onboarding';
 import Toasts from './Toasts';
 import { useToasts } from '../hooks/useToasts';
 
@@ -67,6 +69,7 @@ export default function NodeEditor() {
   const [menu, setMenu] = useState<{ x: number; y: number; nodeId: string } | null>(null);
   const clipboardRef = useRef<RfNode | null>(null);
   const [resultsOpen, setResultsOpen] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(hasSeenOnboarding() ? false : true);
 
   const historyRef = useRef<{ stack: Snapshot[]; index: number }>({ stack: [], index: -1 });
 
@@ -360,12 +363,16 @@ export default function NodeEditor() {
   useEffect(() => {
     if (lastPhase.current !== 'completed' && run.phase === 'completed') {
       push('success', 'Workflow completed.');
+      if (showOnboarding) {
+        markOnboardingDone();
+        setShowOnboarding(false);
+      }
     }
     if (lastPhase.current !== 'failed' && run.phase === 'failed') {
       push('error', `Run failed:\n${run.errors.join('\n')}`);
     }
     lastPhase.current = run.phase;
-  }, [run.phase, run.errors, push]);
+  }, [run.phase, run.errors, push, showOnboarding]);
 
   // Reflect live per-node status onto the canvas.
   const displayNodes = useMemo(
@@ -403,7 +410,19 @@ export default function NodeEditor() {
         onToggleResults={() => setResultsOpen((o) => !o)}
       />
 
-      <div className="mt-14 flex min-h-0 flex-1">
+      <div className="mt-14 flex min-h-0 flex-1 flex-col">
+        {backendStatus === 'disconnected' && (
+          <div className="flex items-center justify-center gap-2 border-b border-amber-200 bg-amber-50 px-4 py-2 text-xs text-amber-900">
+            <span>
+              🔴 The local backend isn't running. Start everything with{' '}
+              <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono font-semibold">
+                npx github:Navid-Moradimehr/RoundAIble
+              </code>{' '}
+              (or <code className="font-mono">npm run dev</code> in the repo).
+            </span>
+          </div>
+        )}
+        <div className="flex min-h-0 flex-1">
         <WorkflowSidebar
           workflows={workflows}
           activeId={activeId}
@@ -528,6 +547,7 @@ export default function NodeEditor() {
             activeNodes={run.activeNodes}
           />
         )}
+        </div>
       </div>
 
       {configNodeId && configNode && (
@@ -557,6 +577,14 @@ export default function NodeEditor() {
         onClose={() => setKeyModalOpen(false)}
       />
 
+      {showOnboarding && (
+        <OnboardingCard
+          onDismiss={() => {
+            markOnboardingDone();
+            setShowOnboarding(false);
+          }}
+        />
+      )}
       <Toasts toasts={toasts} dismiss={dismiss} />
     </div>
   );
