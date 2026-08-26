@@ -34,10 +34,10 @@ All OpenAI-compatible providers share one client; add a provider by pointing the
 **Option A — one command (no setup):**
 
 ```bash
-npx github:Navid-Moradimehr/RoundAIble
+npx roundaible
 ```
 
-Installs dependencies on first run, builds, starts everything and opens your browser at **http://localhost:4199**. One process serves both the app and its API.
+Downloads the app, installs dependencies on first run, builds, starts everything and opens your browser at **http://localhost:4199**. One process serves both the app and its API. (No npm account needed; alternatively `npx github:Navid-Moradimehr/RoundAIble` runs straight from source.)
 
 **Option B — double-click:**
 

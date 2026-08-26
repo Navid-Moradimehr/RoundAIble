@@ -1,11 +1,26 @@
 {
-  "name": "roundaible-web",
+  "name": "roundaible",
   "version": "2.0.0",
-  "description": "AI-Powered Multi-Agent Code Generation and Collaborative Reasoning (local-first web app)",
-  "private": true,
+  "description": "Multi-agent code generation in your browser: AI models compete on your task, critics score them, the best code wins. Local-first, one command to run.",
   "bin": {
     "roundaible": "scripts/launch.mjs"
   },
+  "files": [
+    "scripts/",
+    "backend/src/",
+    "backend/package.json",
+    "backend/tsconfig.json",
+    "backend/.env.example",
+    "frontend/src/",
+    "frontend/index.html",
+    "frontend/package.json",
+    "frontend/vite.config.ts",
+    "frontend/tsconfig.json",
+    "frontend/tsconfig.app.json",
+    "frontend/tsconfig.node.json",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "prepare": "node scripts/prepare.js",
     "setup": "npm install --prefix backend --no-audit --no-fund && npm install --prefix frontend --no-audit --no-fund && npm run build",
