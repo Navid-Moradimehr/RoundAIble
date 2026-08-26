@@ -139,3 +139,6 @@ start-roundaible.*
 stop-roundaible.*
 build-*.bat
 build-*.ps1
+
+# Vite dep optimizer cache
+frontend/.vite/
